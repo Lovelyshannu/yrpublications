@@ -24,7 +24,7 @@ exports.postLogin = [
       }
       const isMatch = await user.matchPassword(password);
       if (!isMatch) {
-        req.flash('error_msg', 'Invalid email or password');
+       req.flash('error_msg', 'Invalid email or password');
         return res.redirect('/login');
       }
       req.session.user = { id: user._id, name: user.name, isAdmin: user.isAdmin };

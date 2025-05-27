@@ -11,12 +11,14 @@
     <li>Total Invoices: <%= stats.invoices %></li>
   </ul>
 
-  <h2>Manage Users</h2>
-  <ul>
-    <% users.forEach(user => { %>
-      <li><%= user.name %> - <%= user.email %> - <%= user.isAdmin ? 'Admin' : 'User' %></li>
-    <% }) %>
-  </ul>
+ <h2>Manage Users</h2>
+<% articles.forEach(article => { %>
+  <div class="article-card">
+    <h3><%= article.title %></h3>
+    <p><%= article.description %></p>
+    <a href="/<%= article.filePath %>" target="_blank">View File</a>
+  </div>
+<% }) %>
 
   <h2>Manage Articles</h2>
   <ul>
