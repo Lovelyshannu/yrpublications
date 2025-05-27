@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const articleController = require('../controllers/articleController');
-const { ensureAdmin } = require('../middleware/authMiddleware');
+const { ensureAdmin } = require('../Middleware/authMiddleware');
 
 console.log(__dirname);
 
