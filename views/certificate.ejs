@@ -17,10 +17,9 @@
       <p><strong>Issued On:</strong> <%= certificate.issueDate.toDateString() %></p>
       <a href="/uploads/certificates/<%= certificate.fileName %>" target="_blank" download>Download Certificate</a>
     </div>
-  <% } else if (typeof verified !== 'undefined' && verified === false) { %>
-  <p class="error">Certificate number not found or invalid.</p>
-<% } %>
-
+  <% } else if (verified === false) { %>
+    <p class="error">Certificate number not found or invalid.</p>
+  <% } %>
 </section>
 
 <%- include('partials/footer') %>

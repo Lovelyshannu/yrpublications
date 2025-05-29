@@ -2,23 +2,6 @@
 
 <section class="auth-section">
   <h1>Register</h1>
-
-    <% if (typeof messages !== 'undefined') { %>
-      <% if (error_msg.length > 0) { %>
-        <% error_msg.forEach(msg => { %>
-        <div class="alert alert-danger"><%= msg %></div>
-        <% }) %>
-      <% } %>
-
-      <% if (success_msg.length > 0) { %>
-        <% success_msg.forEach(msg => { %>
-        <div class="alert alert-success"><%= msg %></div>
-        <% }) %>
-      <% } %>
-
-    <% } %>
-
-
   <form method="POST" action="/register" class="auth-form">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required />

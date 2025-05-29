@@ -1,0 +1,17 @@
+<%- include('partials/header', { title: 'Public Documents', active: '' }) %>
+
+<section class="documents-section">
+  <h1>Public Documents</h1>
+  <ul>
+    <% articles.forEach(doc => { %>
+      <li>
+        <h3><%= doc.title %> by <%= doc.author %></h3>
+        <p><%= doc.description %></p>
+        <a href="/uploads/articles/<%= doc.filename %>" target="_blank" download>Download</a>
+        <p><small>Uploaded on <%= doc.createdAt.toDateString() %></small></p>
+      </li>
+    <% }) %>
+  </ul>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,85 +1,68 @@
 const User = require('../models/user');
-const { body, validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
 
 exports.getLogin = (req, res) => {
   res.render('login');
 };
 
-exports.postLogin = [
-  body('email', 'Please enter a valid email').isEmail().normalizeEmail(),
-  body('password', 'Password cannot be blank').notEmpty(),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      req.flash('error_msg', errors.array().map(e => e.msg).join(', '));
-      return res.redirect('/login');
-    }
+exports.postLogin = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
 
-    const { email, password } = req.body;
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        req.flash('error_msg', 'Invalid email or password');
-        return res.redirect('/login');
-      }
-      const isMatch = await user.matchPassword(password);
-      if (!isMatch) {
-       req.flash('error_msg', 'Invalid email or password');
-        return res.redirect('/login');
-      }
-      req.session.user = { id: user._id, name: user.name, isAdmin: user.isAdmin };
-      req.flash('success_msg', 'Logged in successfully');
-      res.redirect('/');
-    } catch (err) {
-      console.error(err);
-      req.flash('error_msg', 'Server error');
-      res.redirect('/login');
-    }
+  if (!user) {
+    req.flash('error_msg', 'Invalid email or password');
+    return res.redirect('/login');
   }
-];
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    req.flash('error_msg', 'Invalid email or password');
+    return res.redirect('/login');
+  }
+
+  req.session.user = {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role
+  };
+
+  req.flash('success_msg', 'Welcome back!');
+  res.redirect('/');
+};
 
 exports.getRegister = (req, res) => {
   res.render('register');
 };
 
-exports.postRegister = [
-  body('name', 'Name is required').notEmpty(),
-  body('email', 'Enter a valid email').isEmail().normalizeEmail(),
-  body('password', 'Password must be 6 or more characters').isLength({ min: 6 }),
-  body('password2').custom((value, { req }) => {
-    if (value !== req.body.password) throw new Error('Passwords do not match');
-    return true;
-  }),
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      req.flash('error_msg', errors.array().map(e => e.msg).join(', '));
-      return res.redirect('/register');
-    }
+exports.postRegister = async (req, res) => {
+  const { name, email, password, password2 } = req.body;
 
-    const { name, email, password } = req.body;
-
-    try {
-      let user = await User.findOne({ email });
-      if (user) {
-        req.flash('error_msg', 'Email already registered');
-        return res.redirect('/register');
-      }
-      user = new User({ name, email, password });
-      await user.save();
-      req.flash('success_msg', 'Registration successful. Please login.');
-      res.redirect('/login');
-    } catch (err) {
-      console.error(err);
-      req.flash('error_msg', 'Server error');
-      res.redirect('/register');
-    }
+  if (!name || !email || !password || !password2) {
+    req.flash('error_msg', 'Please fill in all fields');
+    return res.redirect('/register');
   }
-];
+
+  if (password !== password2) {
+    req.flash('error_msg', 'Passwords do not match');
+    return res.redirect('/register');
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    req.flash('error_msg', 'Email already registered');
+    return res.redirect('/register');
+  }
+
+  const newUser = new User({ name, email, password });
+  await newUser.save();
+
+  req.flash('success_msg', 'Registration successful! Please log in.');
+  res.redirect('/login');
+};
 
 exports.logout = (req, res) => {
-  req.session.destroy(err => {
-    if (err) console.log(err);
+  req.session.destroy(() => {
     res.redirect('/login');
   });
 };

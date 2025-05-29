@@ -11,37 +11,34 @@
     <li>Total Invoices: <%= stats.invoices %></li>
   </ul>
 
- <h2>Manage Users</h2>
-<% articles.forEach(article => { %>
-  <div class="article-card">
-    <h3><%= article.title %></h3>
-    <p><%= article.description %></p>
-    <a href="/<%= article.filePath %>" target="_blank">View File</a>
-  </div>
-<% }) %>
+  <h2>Manage Users</h2>
+  <ul>
+    <% users.forEach(user => { %>
+      <li><%= user.name %> - <%= user.email %> - <%= user.isAdmin ? 'Admin' : 'User' %></li>
+    <% }) %>
+  </ul>
 
   <h2>Manage Articles</h2>
   <ul>
     <% articles.forEach(article => { %>
-      <li><%= article.title %> by <%= article.author %></li>
+      <li>
+  <h3><%= article.title %> by <%= article.author %></h3>
+  <a href="/uploads/articles/<%= article.filename %>" download>Download</a>
+
+  <% if (!article.isApproved) { %>
+    <form method="POST" action="/admin/articles/<%= article._id %>/approve" style="display:inline;">
+      <button type="submit">Approve</button>
+    </form>
+  <% } else { %>
+    <span style="color: green;">✔ Approved</span>
+  <% } %>
+</li>
+
+  <% } %>
+</li>
+
     <% }) %>
   </ul>
-  <h2>Pending Articles</h2>
-  <% articles.filter(a => a.status === 'pending').forEach(article => { %>
-    <div class="article-card">
-      <h3><%= article.title %></h3>
-      <p><%= article.description %></p>
-      <a href="/<%= article.filePath %>" target="_blank">View File</a>
-
-      <form method="POST" action="/articles/admin/approve/<%= article._id %>">
-        <button type="submit">Approve</button>
-      </form>
-      <form method="POST" action="/articles/admin/reject/<%= article._id %>">
-        <button type="submit">Reject</button>
-      </form>
-    </div>
-  <% }) %>
-
 
   <h2>Manage Certificates</h2>
   <ul>

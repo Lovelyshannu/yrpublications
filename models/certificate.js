@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const certificateSchema = new mongoose.Schema({
-  certificateNumber: { type: String, required: true, unique: true },
-  studentName: { type: String, required: true },
-  courseName: { type: String, required: true },
-  issueDate: { type: Date, default: Date.now },
-  filePath: { type: String, required: true }
+  certNumber: { type: String, unique: true },
+  name: String,
+  description: String,
+  filePath: String,
+  createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Certificate', certificateSchema);
