@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const certificateController = require('../controllers/certificateController');
-const { isAdmin, isAuthenticated } = require('../middleware/authMiddleware');
+const { isAdmin, isAuthenticated } = require('../Middleware/authMiddleware');
 
 router.get('/', certificateController.getVerifyPage);
 router.post('/verify', certificateController.verifyCertificate);
