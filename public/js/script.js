@@ -1,8 +1,13 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", () => {
   // Flash message auto-dismiss
   const flashMessages = document.querySelectorAll('.flash-message');
+  flashMessages.forEach(msg => {
+    setTimeout(() => {
+      msg.style.display = 'none';
+    }, 5000); // 5 seconds
+  });
+
+  // Mobile menu toggle
   const menuToggle = document.getElementById("menuToggle");
   const navLinks = document.getElementById("navLinks");
 
@@ -10,14 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     menuToggle.addEventListener("click", () => {
       navLinks.classList.toggle("show");
     });
-    }
-  });
-
-  flashMessages.forEach(msg => {
-    setTimeout(() => {
-      msg.style.display = 'none';
-    }, 5000); // 5 seconds
-  });
+  }
 
   // Preview filename in upload forms
   const fileInputs = document.querySelectorAll('input[type="file"]');
