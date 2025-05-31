@@ -25,40 +25,40 @@ exports.getUpload = (req, res) => {
 exports.postUpload = async (req, res) => {
   try {
     const { title, author, description } = req.body;
+
     if (!req.files || !req.files.articleFile) {
-      req.flash('error_msg', 'No file uploaded');
+      req.flash('error_msg', 'No article file uploaded');
       return res.redirect('/articles/upload');
     }
 
     const articleFile = req.files.articleFile;
-    const allowedTypes = ['application/pdf', 'application/msword', 
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
     if (!allowedTypes.includes(articleFile.mimetype)) {
-      req.flash('error_msg', 'Only PDF or Word documents are allowed');
+      req.flash('error_msg', 'Only PDF or DOCX files are allowed');
       return res.redirect('/articles/upload');
     }
 
-    // Save file
     const uploadPath = path.join(__dirname, '..', 'uploads', 'articles', articleFile.name);
     await articleFile.mv(uploadPath);
 
-    // Save in DB
-    const article = new Article({
+    const newArticle = new Article({
       title,
       author,
       description,
       filename: articleFile.name,
-      uploader: req.session.user.id
+      filePath: '/uploads/articles/' + articleFile.name,
+      uploader: req.session.user._id,
+      isApproved: false
     });
 
-    await article.save();
+    await newArticle.save();
 
-    req.flash('success_msg', 'Article uploaded successfully!');
-    res.redirect('/articles');
-  } catch (err) {
-    console.error(err);
-    req.flash('error_msg', 'Server error during upload');
+    req.flash('success_msg', 'Article uploaded successfully! Awaiting admin approval.');
+    res.redirect('/articles/upload');
+  } catch (error) {
+    console.error(error);
+    req.flash('error_msg', 'Upload failed. Try again.');
     res.redirect('/articles/upload');
   }
 };
