@@ -39,7 +39,13 @@ exports.postUpload = async (req, res) => {
       return res.redirect('/articles/upload');
     }
 
-    const uploadPath = path.join(__dirname, '..', 'uploads', 'articles', articleFile.name);
+    // ✅ Ensure uploads/articles folder exists
+    const uploadDir = path.join(__dirname, '..', 'uploads', 'articles');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const uploadPath = path.join(uploadDir, articleFile.name);
     await articleFile.mv(uploadPath);
 
     const newArticle = new Article({
@@ -56,6 +62,7 @@ exports.postUpload = async (req, res) => {
 
     req.flash('success_msg', 'Article uploaded successfully! Awaiting admin approval.');
     res.redirect('/articles/upload');
+
   } catch (error) {
     console.error(error);
     req.flash('error_msg', 'Upload failed. Try again.');
