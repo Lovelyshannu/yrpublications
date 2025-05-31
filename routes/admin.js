@@ -13,4 +13,17 @@ router.get('/certificates', isAuthenticated, isAdmin, adminController.listCertif
 // Invoice generation endpoint example
 router.get('/invoice/:articleId', isAuthenticated, isAdmin, adminController.generateInvoice);
 
+router.get('/download/:filename', isAuthenticated, isAdmin, (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', 'articles', req.params.filename);
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      req.flash('error_msg', 'File not found');
+      return res.redirect('/admin/articles');
+    }
+
+    res.download(filePath);
+  });
+});
+
 module.exports = router;
