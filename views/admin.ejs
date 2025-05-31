@@ -23,7 +23,7 @@
     <% articles.forEach(article => { %>
       <li>
   <h3><%= article.title %> by <%= article.author %></h3>
-  <a href="/uploads/articles/<%= article.filename %>" download>Download</a>
+  <a href="/admin/download/<%= article.filename %>">Download</a>
 
   <% if (!article.isApproved) { %>
     <form method="POST" action="/admin/articles/<%= article._id %>/approve" style="display:inline;">

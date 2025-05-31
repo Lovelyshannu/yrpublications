@@ -7,7 +7,7 @@ module.exports.isAuthenticated = (req, res, next) => {
 };
 
 module.exports.isAdmin = (req, res, next) => {
-  if (req.session.user && req.session.user.role === 'admin') {
+  if (req.session.user && req.session.user.isAdmin === true) {
     return next();
   }
   req.flash('error_msg', 'Admin access only');
