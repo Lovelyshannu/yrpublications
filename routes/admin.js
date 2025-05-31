@@ -8,6 +8,7 @@ const { isAdmin, isAuthenticated } = require('../Middleware/authMiddleware');
 router.get('/', isAuthenticated, isAdmin, adminController.dashboard);
 
 router.get('/users', isAuthenticated, isAdmin, adminController.listUsers);
+router.get('/admin', ensureAdmin, adminController.dashboard);
 router.get('/articles', isAuthenticated, isAdmin, adminController.listArticles);
 router.post('/articles/:id/approve', isAuthenticated, isAdmin, adminController.approveArticle);
 router.get('/certificates', isAuthenticated, isAdmin, adminController.listCertificates);
@@ -25,5 +26,14 @@ router.get('/download/:filename', isAuthenticated, isAdmin, (req, res) => {
     res.download(filePath);
   });
 });
+
+function ensureAdmin(req, res, next) {
+  if (req.session.user && req.session.user.isAdmin) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
 
 module.exports = router;

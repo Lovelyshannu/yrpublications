@@ -21,11 +21,12 @@ exports.postLogin = async (req, res) => {
   }
 
   req.session.user = {
-    id: user._id,
+    _id: user._id,
     name: user.name,
     email: user.email,
-    role: user.role
+    isAdmin: user.isAdmin
   };
+
 
   req.flash('success_msg', 'Welcome back!');
   res.redirect('/');
