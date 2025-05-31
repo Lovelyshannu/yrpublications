@@ -13,13 +13,17 @@
   <% } else { %>
     <ul class="article-list">
       <% articles.forEach(article => { %>
-        <li>
-          <h3><%= article.title %></h3>
-          <p><strong>Author:</strong> <%= article.author %></p>
-          <p><%= article.description %></p>
-          <a href="/uploads/articles/<%= article.fileName %>" target="_blank" download>Download Article</a>
-          <p><small>Published on <%= article.createdAt.toDateString() %></small></p>
-        </li>
+        <% if (article.isApproved) { %>
+          <li>
+            <h3><%= article.title %></h3>
+            <p><strong>Author:</strong> <%= article.author %></p>
+            <p><%= article.description %></p>
+            <% if (user && user.isAdmin) { %>
+              <a href="/admin/download/<%= article.filename %>">Download Article</a>
+            <% } %>
+            <p><small>Published on <%= article.createdAt.toDateString() %></small></p>
+          </li>
+        <% } %>
       <% }) %>
     </ul>
   <% } %>

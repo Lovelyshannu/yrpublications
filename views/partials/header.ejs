@@ -29,7 +29,8 @@
       <li><a href="/register" class="<%= active === 'register' ? 'active' : '' %>">Register</a></li>
     <% } else { %>
       <% if(user.isAdmin) { %>
-        <li><a href="/admin" class="<%= active === 'admin' ? 'active' : '' %>">Admin</a></li>
+        <li><a href="/admin" class="<%= active === 'admin' ? 'active' : '' %>">Admin Dashboard</a></li>
+        <li><a href="/admin/articles">Manage Articles</a></li>
       <% } else { %>
         <li><a href="/articles/upload" class="<%= active === 'upload' ? 'active' : '' %>">Upload</a></li>
       <% } %>
