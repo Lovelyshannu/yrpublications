@@ -7,7 +7,13 @@
       <li>
         <h3><%= doc.title %> by <%= doc.author %></h3>
         <p><%= doc.description %></p>
-        <a href="/uploads/articles/<%= doc.filename %>" target="_blank" download>Download</a>
+
+        <% if (user && user.isAdmin) { %>
+          <a href="/admin/download/<%= doc.filename %>" target="_blank">Download</a>
+        <% } else { %>
+          <p style="color: gray;"><em>Download available for admin only</em></p>
+        <% } %>
+
         <p><small>Uploaded on <%= doc.createdAt.toDateString() %></small></p>
       </li>
     <% }) %>
