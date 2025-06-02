@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const adminController = require('../controllers/adminController');
 const { isAdmin, isAuthenticated } = require('../Middleware/authMiddleware');
-const Article = require('../models/Article');
+const Article = require('../models/article');
 
 // Admin dashboard
 router.get('/', isAuthenticated, isAdmin, adminController.dashboard);

@@ -21,4 +21,4 @@ const articleSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('article', articleSchema);
