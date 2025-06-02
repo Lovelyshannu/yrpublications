@@ -1,50 +1,65 @@
 <%- include('partials/header', { title: 'Admin Dashboard', active: 'admin' }) %>
 
 <section class="admin-dashboard">
-  <h1>Admin Dashboard</h1>
+  <div class="admin-overlay"></div>
+  <div class="admin-container">
+    <h1>Admin Dashboard</h1>
 
-  <h2>Statistics</h2>
-  <ul>
-    <li>Total Users: <%= stats.users %></li>
-    <li>Total Articles: <%= stats.articles %></li>
-    <li>Total Certificates: <%= stats.certificates %></li>
-    <li>Total Invoices: <%= stats.invoices %></li>
-  </ul>
+    <div class="dashboard-grid">
 
-  <h2>Manage Users</h2>
-  <ul>
-    <% users.forEach(user => { %>
-      <li><%= user.name %> - <%= user.email %> - <%= user.isAdmin ? 'Admin' : 'User' %></li>
-    <% }) %>
-  </ul>
+      <!-- Stats Card -->
+      <div class="card">
+        <h2>Statistics</h2>
+        <ul>
+          <li><strong>Users:</strong> <%= stats.users %></li>
+          <li><strong>Articles:</strong> <%= stats.articles %></li>
+          <li><strong>Certificates:</strong> <%= stats.certificates %></li>
+          <li><strong>Invoices:</strong> <%= stats.invoices %></li>
+        </ul>
+      </div>
 
-  <h2>Manage Articles</h2>
-  <ul>
-    <% articles.forEach(article => { %>
-      <li>
-        <h3><%= article.title %> by <%= article.author %></h3>
-        <a href="/uploads/<%= article.filename %>" target="_blank">View</a> |
-        <a href="/uploads/<%= article.filename %>" download>Download</a>
+      <!-- Users Card -->
+      <div class="card">
+        <h2>Manage Users</h2>
+        <ul>
+          <% users.forEach(user => { %>
+            <li><%= user.name %> - <%= user.email %> - <%= user.isAdmin ? 'Admin' : 'User' %></li>
+          <% }) %>
+        </ul>
+      </div>
 
-        <% if (!article.isApproved) { %>
-          <form method="POST" action="/admin/articles/<%= article._id %>/approve" style="display:inline;">
-            <button type="submit">Approve</button>
-          </form>
-        <% } else { %>
-          <span style="color: green;">✔ Approved</span>
-        <% } %>
-      </li>
-    <% }) %>
-  </ul>
+      <!-- Articles Card -->
+      <div class="card">
+        <h2>Manage Articles</h2>
+        <ul>
+          <% articles.forEach(article => { %>
+            <li>
+              <h3><%= article.title %> by <%= article.author %></h3>
+              <a href="/admin/download/<%= article.filename %>">Download</a>
+              <% if (!article.isApproved) { %>
+                <form method="POST" action="/admin/articles/<%= article._id %>/approve" style="display:inline;">
+                  <button type="submit" class="approve-btn">Approve</button>
+                </form>
+              <% } else { %>
+                <span class="approved">✔ Approved</span>
+              <% } %>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
 
-  <h2>Manage Certificates</h2>
-  <ul>
-    <% certificates.forEach(cert => { %>
-      <li><%= cert.number %> - <%= cert.recipientName %></li>
-    <% }) %>
-  </ul>
+      <!-- Certificates Card -->
+      <div class="card">
+        <h2>Manage Certificates</h2>
+        <ul>
+          <% certificates.forEach(cert => { %>
+            <li><%= cert.number %> - <%= cert.recipientName %></li>
+          <% }) %>
+        </ul>
+      </div>
 
-  <br>
+    </div>
+  </div>
 </section>
 
 <%- include('partials/footer') %>

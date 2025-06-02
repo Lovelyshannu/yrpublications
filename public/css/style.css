@@ -383,6 +383,84 @@ main {
   border-radius: 5px;
 }
 
+.admin-dashboard {
+  position: relative;
+  background: url('/images/admin-bg.jpg') center/cover no-repeat;
+  padding: 60px 20px;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.admin-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+.admin-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.admin-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  text-align: left;
+}
+
+.card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: #2a4365;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card li {
+  margin-bottom: 10px;
+}
+
+.approve-btn {
+  background: #2b6cb0;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.approve-btn:hover {
+  background: #2c5282;
+}
+
+.approved {
+  color: green;
+  font-weight: bold;
+}
+
+
 
 
 
