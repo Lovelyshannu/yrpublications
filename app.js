@@ -62,3 +62,26 @@ app.get('/', (req, res) => res.render('index'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const { SitemapStream, streamToPromise } = require('sitemap');
+
+app.get('/public/sitemap.xml', async (req, res) => {
+  try {
+    res.header('Content-Type', 'application/xml');
+
+    const sitemap = new SitemapStream({ hostname: 'https://shanmukh-trlv.onrender.com' });
+
+    sitemap.write({ url: '/', changefreq: 'daily', priority: 1.0 });
+    sitemap.write({ url: '/articles', changefreq: 'weekly', priority: 0.8 });
+    sitemap.write({ url: '/upload', changefreq: 'monthly', priority: 0.7 });
+    sitemap.write({ url: '/certificates', changefreq: 'monthly', priority: 0.6 });
+    sitemap.write({ url: '/contact', changefreq: 'yearly', priority: 0.3 });
+    sitemap.end();
+
+    const xml = await streamToPromise(sitemap);
+    res.send(xml.toString());
+  } catch (e) {
+    console.error(e);
+    res.status(500).end();
+  }
+});
