@@ -2,8 +2,9 @@ const Article = require('../models/article');
 const path = require('path');
 const fs = require('fs');
 
+// List all approved articles (for user view)
 exports.listArticles = async (req, res) => {
-  let query = { isApproved: true }; // 🔥 Only approved
+  let query = { status: 'approved' };
 
   if (req.query.search) {
     const search = req.query.search;
@@ -13,15 +14,20 @@ exports.listArticles = async (req, res) => {
     ];
   }
 
-  const articles = await Article.find({ status: 'approved' }).sort({ createdAt: -1 });
-  res.render('articles', { articles, user: req.session.user });
+  const articles = await Article.find(query).sort({ createdAt: -1 });
+  res.render('articles', {
+    articles,
+    user: req.session.user,
+    active: 'articles'  // 👈 include this if nav uses it
+  });
 };
 
-
+// Upload page
 exports.getUpload = (req, res) => {
-  res.render('upload');
+  res.render('upload', { active: 'articles' });
 };
 
+// Handle article upload
 exports.postUpload = async (req, res) => {
   try {
     const { title, author, description } = req.body;
@@ -39,7 +45,6 @@ exports.postUpload = async (req, res) => {
       return res.redirect('/articles/upload');
     }
 
-    // ✅ Ensure uploads/articles folder exists
     const uploadDir = path.join(__dirname, '..', 'uploads', 'articles');
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -55,7 +60,7 @@ exports.postUpload = async (req, res) => {
       filename: articleFile.name,
       filePath: '/uploads/articles/' + articleFile.name,
       uploader: req.session.user._id,
-      isApproved: false
+      status: 'pending' // 👈 use the enum field instead
     });
 
     await newArticle.save();
@@ -70,7 +75,6 @@ exports.postUpload = async (req, res) => {
   }
 };
 
-
 // Decline article
 exports.declineArticle = async (req, res) => {
   const article = await Article.findById(req.params.id);
@@ -79,10 +83,25 @@ exports.declineArticle = async (req, res) => {
     return res.redirect('/admin/articles');
   }
 
-  article.isApproved = false; // Optional, just to be sure
-  article.isDeclined = true; // You must add this field in your model
+  article.status = 'declined';
   await article.save();
 
   req.flash('success_msg', 'Article declined');
   res.redirect('/admin/articles');
+};
+
+// View individual approved article
+exports.viewArticle = async (req, res) => {
+  const article = await Article.findById(req.params.id).populate('uploader');
+
+  if (!article || article.status !== 'approved') {
+    req.flash('error_msg', 'Article not found or not approved.');
+    return res.redirect('/articles');
+  }
+
+  res.render('view-article', {
+    article,
+    user: req.session.user,
+    active: 'articles'
+  });
 };

@@ -22,7 +22,7 @@ router.get('/view/:id', async (req, res) => {
   }
 });
 
-
+router.get('/:id', articleController.viewArticle); // 👈 Make sure this is after all specific routes
 router.get('/upload', isAuthenticated, articleController.getUpload);
 router.post('/upload', isAuthenticated, articleController.postUpload);
 router.post('/articles/:id/decline', isAuthenticated, isAdmin, adminController.declineArticle);
