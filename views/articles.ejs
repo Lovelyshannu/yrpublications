@@ -1,34 +1,36 @@
 <%- include('partials/header', { title: 'Articles', active: 'articles' }) %>
 
-<section class="articles-section">
-  <h1>Published Articles</h1>
+<section class="modern-section">
+  <div class="overlay"></div>
+  <div class="container">
+    <h1>Published Articles</h1>
 
-  <form method="GET" action="/articles" class="search-form">
-    <input type="text" name="search" placeholder="Search by title or author" value="<%= typeof search !== 'undefined' ? search : '' %>" />
-    <button type="submit">Search</button>
-  </form>
+    <form method="GET" action="/articles" class="search-form">
+      <input type="text" name="search" placeholder="Search by title or author" value="<%= typeof search !== 'undefined' ? search : '' %>" />
+      <button type="submit">Search</button>
+    </form>    
 
-   <% if(articles.length === 0) { %>
-    <p>No approved articles available.</p>
-  <% } else { %>
-    <ul class="article-list">
-      <% articles.forEach(article => { %>
-        <li>
-          <h3><%= article.title %></h3>
-          <p><strong>Author:</strong> <%= article.author %></p>
-          <p><%= article.description %></p>
-          <p><small>Published on <%= article.createdAt.toDateString() %></small></p>
-
-          <% if (user && user.isAdmin) { %>
-            <a href="/admin/download/<%= article.fileName %>">Download</a>
-          <% } else { %>
-            <a href="/uploads/articles/<%= article.filename %>" target="_blank">View</a>
-            <em style="color: gray;">Download restricted to admins</em>
-          <% } %>
-        </li>
-      <% }) %>
-    </ul>
-  <% } %>
+    <% if (articles.length === 0) { %>
+      <p>No articles found.</p>
+    <% } else { %>
+      <div class="articles-grid">
+        <% articles.forEach(article => { %>
+          <div class="article-card">
+            <h2><%= article.title %></h2>
+            <p><strong>Author:</strong> <%= article.author %></p>
+            <p><%= article.description %></p>
+            <p><small>Published on <%= article.createdAt.toDateString() %></small></p>
+            <% if (user && user.isAdmin) { %>
+              <a href="/admin/download/<%= article.filename %>" class="btn">Download</a>
+            <% } else { %>
+              <a href="/uploads/articles/<%= article.filename %>" target="_blank">View</a>
+              <span class="note">Download available for admins only</span>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
 </section>
 
 <%- include('partials/footer') %>
