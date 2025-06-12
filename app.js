@@ -85,3 +85,7 @@ app.get('/public/sitemap.xml', async (req, res) => {
     res.status(500).end();
   }
 });
+
+app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
+app.use('/sitemap.xml', express.static(path.join(__dirname, 'sitemap.xml')));
+
