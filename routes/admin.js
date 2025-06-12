@@ -44,6 +44,18 @@ router.get('/download/:filename', isAuthenticated, isAdmin, (req, res) => {
   });
 });
 
+router.get('/download/:filename', async (req, res) => {
+  const filePath = path.join(__dirname, '..', 'uploads', 'articles', req.params.filename);
+  res.download(filePath, err => {
+    if (err) {
+      console.error(err);
+      req.flash('error_msg', 'Error downloading file');
+      res.redirect('/articles');
+    }
+  });
+});
+
+
 // Optional: Invoice route
 router.get('/invoice/:articleId', isAuthenticated, isAdmin, adminController.generateInvoice);
 

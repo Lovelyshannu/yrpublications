@@ -1,0 +1,20 @@
+<%- include('partials/header', { title: article.title || 'View Article' }) %>
+
+<section class="article-view">
+  <div class="container">
+    <h1><%= article.title %></h1>
+    <p><strong>Author:</strong> <%= article.author %></p>
+    <p><strong>Description:</strong></p>
+    <p><%= article.description %></p>
+
+    <div style="margin-top: 20px;">
+      <a href="/articles/download/<%= article.filename %>" class="btn btn-primary" target="_blank">📄 Download Article</a>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <a href="/articles" class="btn">⬅ Back to Articles</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -5,16 +5,23 @@ const { isAuthenticated } = require('../Middleware/authMiddleware');
 const adminController = require('../controllers/adminController');
 const Article = require('../models/article');
 
-router.get('/', async (req, res) => {
+router.get('/view/:id', async (req, res) => {
   try {
-    const articles = await Article.find({ status: 'approved' }).sort({ createdAt: -1 });
-    res.render('articles', { articles, user: req.session.user });
+    const article = await Article.findById(req.params.id).populate('uploader');
+
+    if (!article || article.status !== 'approved') {
+      req.flash('error_msg', 'This article is not available for viewing.');
+      return res.redirect('/articles');
+    }
+
+    res.render('view-article', { article, user: req.session.user });
   } catch (err) {
     console.error(err);
-    req.flash('error_msg', 'Failed to load articles.');
-    res.redirect('/');
+    req.flash('error_msg', 'An error occurred while loading the article.');
+    res.redirect('/articles');
   }
 });
+
 
 router.get('/upload', isAuthenticated, articleController.getUpload);
 router.post('/upload', isAuthenticated, articleController.postUpload);
