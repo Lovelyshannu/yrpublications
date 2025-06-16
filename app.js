@@ -31,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI, collectionName: 'sessions' })
 }));
 
@@ -84,6 +84,12 @@ app.get('/public/sitemap.xml', async (req, res) => {
     console.error(e);
     res.status(500).end();
   }
+});
+
+app.get('/', (req, res) => {
+  res.render('index', {
+    verificationMeta: '<meta name="google-site-verification" content="IN0dJw0DJHE60wb3V5ksZb_KTdr4jqmknMdLMvRoRTw" />'
+  });
 });
 
 app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));

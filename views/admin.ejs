@@ -58,11 +58,23 @@
         <h2>Manage Certificates</h2>
         <ul>
           <% certificates.forEach(cert => { %>
-            <li><%= cert.number %> - <%= cert.recipientName %></li>
+            <li>
+              <%= cert.number %> - <%= cert.recipientName %> 
+              | <a href="/certificates/download/<%= cert._id %>" download>Download</a>
+            </li>
           <% }) %>
         </ul>
       </div>
-
+      <div>
+        <h3>Upload Certificate</h3>
+        <form method="POST" action="/certificates/upload" enctype="multipart/form-data">
+          <input type="text" name="number" placeholder="Certificate Number" required />
+          <input type="text" name="recipientName" placeholder="Recipient Name" required />
+          <input type="date" name="issueDate" required />
+          <input type="file" name="certificateFile" accept=".pdf,.doc,.docx" required />
+          <button type="submit">Upload Certificate</button>
+        </form>       
+      </div>
     </div>
   </div>
 </section>

@@ -4,8 +4,11 @@ const articleSchema = new mongoose.Schema({
   title: String,
   author: String,
   description: String,
+  fileData: Buffer,
+  fileMimeType: String,
   filename: String,
   filePath: String,
+  createdAt: { type: Date, default: Date.now },
   uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
   // ✅ Replace this:

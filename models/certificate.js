@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const certificateSchema = new mongoose.Schema({
-  certNumber: { type: String, unique: true },
-  name: String,
-  description: String,
-  filePath: String,
+  number: { type: String, unique: true },
+  recipientName: String,
+  issueDate: Date,
+  fileData: Buffer,
+  fileMimeType: String,
+  fileName: String,
   createdAt: { type: Date, default: Date.now }
 });
 

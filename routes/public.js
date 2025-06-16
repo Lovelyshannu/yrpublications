@@ -24,6 +24,4 @@ router.get('/documents', async (req, res) => {
   }
 });
 
-res.render('index', { verificationMeta: '<meta name="google-site-verification" content="your_code" />' });
-
 module.exports = router;

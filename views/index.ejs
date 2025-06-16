@@ -1,5 +1,11 @@
 <%- include('partials/header', { title: 'Home', active: 'home' }) %>
 
+<head>
+  <title>Home - YR Publication</title>
+  <%- typeof verificationMeta !== 'undefined' ? verificationMeta : '' %>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
 <section class="hero-section">
   <div class="hero-text">
     <h1>Publish Articles Online With Confidence</h1>
