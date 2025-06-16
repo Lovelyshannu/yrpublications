@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="AYQ5PpfUNxzV3dMXgpoFjS7e41h9iothduHFqdGdLbU" />
 
   <title><%= title %> | YR Publication</title>
   <meta name="description" content="Submit your articles and get published with verified certificates.">
@@ -19,6 +20,11 @@
 
   <link rel="icon" href="/images/logo.png" />
   <link rel="stylesheet" href="/css/style.css" />
+
+  <%- if (verificationMeta) { %>
+    <%= verificationMeta %>
+  <%- } %>
+
 </head>
 
 <body>
