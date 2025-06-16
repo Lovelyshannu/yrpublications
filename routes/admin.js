@@ -33,16 +33,17 @@ router.post('/articles/:id/decline', isAuthenticated, isAdmin, async (req, res) 
 router.get('/certificates', isAuthenticated, isAdmin, adminController.listCertificates);
 
 // Download articles
-router.get('/download/:filename', isAuthenticated, isAdmin, (req, res) => {
-  const filePath = path.join(__dirname, '..', 'uploads', 'articles', req.params.filename);
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      req.flash('error_msg', 'File not found');
-      return res.redirect('/admin/articles');
-    }
-    res.download(filePath);
+router.get('/download/:id', isAuthenticated, isAdmin, async (req, res) => {
+  const article = await Article.findById(req.params.id);
+  if (!article) return res.status(404).send('Not found');
+
+  res.set({
+    'Content-Type': article.fileMimeType,
+    'Content-Disposition': `attachment; filename="${article.fileName}"`
   });
+  res.send(article.fileData);
 });
+
 
 router.get('/download/:filename', async (req, res) => {
   const filePath = path.join(__dirname, '..', 'uploads', 'articles', req.params.filename);

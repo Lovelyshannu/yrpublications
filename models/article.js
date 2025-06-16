@@ -10,6 +10,7 @@ const articleSchema = new mongoose.Schema({
   filePath: String,
   createdAt: { type: Date, default: Date.now },
   uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  isApproved: { type: Boolean, default: false },
 
   // ✅ Replace this:
   // isApproved: { type: Boolean, default: false },
