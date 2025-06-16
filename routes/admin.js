@@ -69,4 +69,6 @@ function ensureAdmin(req, res, next) {
   }
 }
 
+router.post('/certificates/:id/toggle', isAuthenticated, isAdmin, adminController.toggleCertificateApproval);
+
 module.exports = router;

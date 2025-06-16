@@ -5,25 +5,31 @@ const Invoice = require('../models/invoice');
 
 // Admin dashboard
 exports.dashboard = async (req, res) => {
-  const users = await User.find();
+  const search = req.query.search || '';
+  const userQuery = search
+    ? {
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } }
+        ]
+      }
+    : {};
+
+  const users = await User.find(userQuery);
   const articles = await Article.find();
   const certificates = await Certificate.find();
   const invoices = await Invoice.find();
 
   const stats = {
-    users: users.length,
-    articles: articles.length,
-    certificates: certificates.length,
-    invoices: invoices.length,
+    users: await User.countDocuments(),
+    articles: await Article.countDocuments(),
+    certificates: await Certificate.countDocuments(),
+    invoices: await Invoice.countDocuments()
   };
 
-  res.render('admin', {
-    stats,
-    users,
-    articles,
-    certificates,
-  });
+  res.render('admin', { stats, users, articles, certificates, search });
 };
+
 
 // List users
 exports.listUsers = async (req, res) => {
@@ -111,4 +117,23 @@ exports.generateInvoice = async (req, res) => {
   }
 
   res.render('invoice', { invoice, article });
+};
+
+// Toggle certificate approval
+exports.toggleCertificateApproval = async (req, res) => {
+  try {
+    const cert = await Certificate.findById(req.params.id);
+    if (!cert) {
+      req.flash('error_msg', 'Certificate not found.');
+      return res.redirect('/admin');
+    }
+    cert.isApproved = !cert.isApproved;
+    await cert.save();
+    req.flash('success_msg', `Certificate ${cert.isApproved ? 'approved' : 'unapproved'} successfully.`);
+    res.redirect('/admin');
+  } catch (err) {
+    console.error(err);
+    req.flash('error_msg', 'Error toggling approval.');
+    res.redirect('/admin');
+  }
 };

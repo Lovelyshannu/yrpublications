@@ -21,6 +21,13 @@
       <!-- Users Card -->
       <div class="card">
         <h2>Manage Users</h2>
+
+        <!-- 🔍 Search Form -->
+        <form method="GET" action="/admin" style="margin-bottom: 10px;">
+          <input type="text" name="search" placeholder="Search users..." value="<%= search %>" />
+          <button type="submit">Search</button>
+        </form>
+        
         <ul>
           <% users.forEach(user => { %>
             <li><%= user.name %> - <%= user.email %> - <%= user.isAdmin ? 'Admin' : 'User' %></li>
@@ -59,8 +66,15 @@
         <ul>
           <% certificates.forEach(cert => { %>
             <li>
-              <%= cert.number %> - <%= cert.recipientName %> 
-              | <a href="/certificates/download/<%= cert._id %>" download>Download</a>
+              <%= cert.number %> - <%= cert.recipientName %>
+              <% if (cert.isApproved) { %>
+                <span style="color:green;">✔ Approved</span>
+              <% } else { %>
+                <span style="color:red;">❌ Not Approved</span>
+              <% } %>
+              <form action="/admin/certificates/<%= cert._id %>/toggle" method="POST" style="display:inline;">
+                <button type="submit">Toggle Approval</button>
+              </form>
             </li>
           <% }) %>
         </ul>

@@ -1,12 +1,8 @@
 const Certificate = require('../models/certificate');
 const path = require('path');
 
-exports.getUploadPage = (req, res) => {
-  res.render('certificate-upload');
-};
-
 exports.getVerifyPage = (req, res) => {
-  res.render('certificate', { certificate: null, verified: false });
+  res.render('certificate', { certificate: null, verified: null });
 };
 
 exports.verifyCertificate = async (req, res) => {
@@ -19,6 +15,10 @@ exports.verifyCertificate = async (req, res) => {
   }
 
   res.render('certificate', { certificate, verified: true });
+};
+
+exports.getUploadPage = (req, res) => {
+  res.render('certificate-upload');
 };
 
 exports.uploadCertificate = async (req, res) => {
@@ -60,3 +60,36 @@ exports.uploadCertificate = async (req, res) => {
     res.redirect('/certificates/upload');
   }
 };
+
+exports.handleUpload = async (req, res) => {
+  try {
+    const { number, recipientName } = req.body;
+
+    if (!req.files || !req.files.certificateFile) {
+      req.flash('error_msg', 'No file uploaded');
+      return res.redirect('/certificates/upload');
+    }
+
+    const file = req.files.certificateFile;
+
+    const newCert = new Certificate({
+      number,
+      recipientName,
+      issueDate: new Date(),
+      fileName: file.name,
+      fileMimeType: file.mimetype,
+      fileData: file.data
+    });
+
+    await newCert.save();
+
+    req.flash('success_msg', 'Certificate uploaded successfully!');
+    res.redirect('/certificates/upload');
+
+  } catch (err) {
+    console.error(err);
+    req.flash('error_msg', 'Failed to upload certificate.');
+    res.redirect('/certificates/upload');
+  }
+};
+

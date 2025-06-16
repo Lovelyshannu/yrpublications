@@ -1,6 +1,7 @@
 const Article = require('../models/article');
 const path = require('path');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 // List all approved articles (for user view)
 exports.listArticles = async (req, res) => {
@@ -89,3 +90,28 @@ exports.viewArticle = async (req, res) => {
     active: 'articles'
   });
 };
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS
+  }
+});
+
+const mailOptions = {
+  from: '"YR Publication" <no-reply@yrpublication.com>',
+  to: req.session.user.email,
+  subject: 'Article Upload Confirmation',
+  html: `<p>Hi ${req.session.user.name},</p>
+         <p>Your article "<strong>${title}</strong>" was uploaded successfully. We'll notify you once it's approved.</p>
+         <p>Thanks,<br/>YR Publication Team</p>`
+};
+
+transporter.sendMail(mailOptions, (err, info) => {
+  if (err) {
+    console.error('Email error:', err);
+  } else {
+    console.log('Confirmation email sent:', info.response);
+  }
+});

@@ -86,6 +86,15 @@ header {
   text-align: center;
 }
 
+.hero-section {
+  background-image: url('/images/hero-bg.jpg'); /* ✅ this path must be correct */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* or set an appropriate height */
+  color: white;
+}
+
 .intro {
   max-width: 800px;
   margin: 40px auto;
