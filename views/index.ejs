@@ -5,7 +5,11 @@
     <div class="hero-left">
       <h1 class="hero-title">Get Published. Get Recognized.</h1>
       <p class="hero-subtitle">Fast, affordable, and trusted platform for students, researchers, and writers.</p>
-      <a href="/register" class="btn btn-primary">Publish My Article</a>
+      <% if (user) { %>
+        <a href="/articles/upload" class="btn btn-primary">Publish My Article</a>
+      <% } else { %>
+        <a href="/register" class="btn btn-primary">Publish My Article</a>
+      <% } %>
     </div>
     <div class="hero-right">
       <img src="/images/hero-illustration.jpg" alt="Hero Illustration" />
