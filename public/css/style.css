@@ -111,6 +111,9 @@ header {
   transition: all 0.4s ease;
 }
 
+p, a, label, textarea, button{
+  font-size : 1.2em;
+}
 
 .alert.success {
   background-color: #d4edda;
