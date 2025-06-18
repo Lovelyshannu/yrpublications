@@ -834,4 +834,18 @@ main {
     flex-direction: row;
     align-items: center;
   }
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .hero-left, .hero-right {
+    width: 100%;
+  }
+
+  .hero-right img {
+    max-width: 250px;
+    margin-top: 20px;
+  }
 }
