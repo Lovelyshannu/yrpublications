@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+
+<div class="plag-result-box">
+  <h2>Plagiarism Report</h2>
+
+  <p class="score">Similarity: <%= percentage %>%</p>
+
+  <% if (safe) { %>
+    <p class="safe">Document is Safe ✓</p>
+  <% } else { %>
+    <p class="danger">High Similarity Found ⚠</p>
+  <% } %>
+
+  <a href="/plagiarism/certificate?percentage=<%= percentage %>" class="plag-btn">
+    Download Certificate
+  </a>
+</div>
+
+<%- include('partials/footer') %>

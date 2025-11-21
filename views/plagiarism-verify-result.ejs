@@ -1,0 +1,13 @@
+<%- include('partials/header') %>
+
+<div class="plag-result-box">
+  <h2>Certificate Verified</h2>
+
+  <p><strong>ID:</strong> <%= cert.certId %></p>
+  <p><strong>Score:</strong> <%= cert.score %>%</p>
+  <p><strong>Date:</strong> <%= cert.createdAt.toDateString() %></p>
+
+  <a href="/<%= cert.filePath %>" class="plag-btn" download>Download Certificate</a>
+</div>
+
+<%- include('partials/footer') %>

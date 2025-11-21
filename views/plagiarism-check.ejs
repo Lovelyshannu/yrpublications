@@ -1,0 +1,12 @@
+<%- include('partials/header') %>
+
+<div class="plag-container">
+  <h2>Plagiarism Checker</h2>
+
+  <form action="/plagiarism/check" method="POST" enctype="multipart/form-data">
+    <input type="file" name="document" required class="plag-input">
+    <button class="plag-btn">Check Plagiarism</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>
