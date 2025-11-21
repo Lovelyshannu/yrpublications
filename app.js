@@ -9,6 +9,10 @@ const flash = require('connect-flash');
 const app = express();
 require('dotenv').config();
 app.use(require('express-fileupload')());
+app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
+
+const helmet = require("helmet");
+app.use(helmet());
 
 dotenv.config();
 
@@ -54,6 +58,8 @@ app.use('/certificates', require('./routes/certificates'));
 app.use('/admin', require('./routes/admin'));
 app.use('/contact', require('./routes/contact'));
 app.use('/', require('./routes/public'));
+app.use('/plagiarism', require('./routes/plagiarism'));
+
 
 app.get('/about', (req, res) => {
   res.render('about');
@@ -61,12 +67,9 @@ app.get('/about', (req, res) => {
 
 app.get('/', (req, res) => res.render('index'));
 
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
 const { SitemapStream, streamToPromise } = require('sitemap');
 
+app.get('/sitemap.xml', sitemapController);
 app.get('/public/sitemap.xml', async (req, res) => {
   try {
     res.header('Content-Type', 'application/xml');
@@ -94,6 +97,10 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use('/robots.txt', express.static(path.join(__dirname, 'robots.txt')));
+
 app.use('/sitemap.xml', express.static(path.join(__dirname, 'sitemap.xml')));
 
+
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
